@@ -15,22 +15,29 @@
 
 	<dependencies>
 
-
+<!-- 
 		<dependency>
 			<groupId>com.github.codebrig</groupId>
 			<artifactId>journey</artifactId>
 			<version>0.3.3-offline</version>
 
-			<!-- or use the offline version (includes native CEF files for all platforms; 
-				~300MB) -->
-			<!-- <version>0.4.0-online</version> -->
-		</dependency>
-
+			 or use the offline version (includes native CEF files for all platforms; 
+				~300MB)
+			<version>0.4.0-online</version> 
+		</dependency> -->
+ 
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
 			<version>20210307</version>
 		</dependency>
+
+		<dependency>
+			<groupId>org.openjfx</groupId>
+			<artifactId>javafx-controls</artifactId>
+			<version>15.0.1</version>
+		</dependency>
+
 
 	</dependencies>
 

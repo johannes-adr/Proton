@@ -8,7 +8,7 @@ import javafx.util.Pair;
 public class Porto {
 
 	public static void main(String[] args) throws Exception {
-		Proton proton = new Proton(-1, 800,600,"de/jadr/test/http", new Pair<String, Object>("customArg", "pizza"));
+		Proton proton = new Proton(-1, 800,600,"de/jadr/test/http", null, new Pair<String, Object>("customArg", "pizza"));
 		
 		proton.getHTTPServer().addHandler("/api/quit", (e) -> {
 			proton.shutdownGui();

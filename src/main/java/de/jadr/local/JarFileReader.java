@@ -12,6 +12,7 @@ import javax.imageio.ImageIO;
 
 import de.jadr.local.exceptions.JarFileReadException;
 import de.jadr.local.exceptions.JarFileReadException.JarFileReadExceptionMessage;
+import de.jadr.net.JadrHTTPServer.FileReader;
 
 public class JarFileReader {
 	private static final HashMap<String, String> fileTypes;
@@ -60,14 +61,7 @@ public class JarFileReader {
 		return readRelative(path, JarFileReader.class);
 	}
 	
-	public static JarSubFile readRelative(String path, Class clazz) throws IOException, JarFileReadException {
-		StringBuilder sb = new StringBuilder(path).reverse();
-		int i = sb.indexOf(".");
-		if(i == -1) {
-			throw new JarFileReadException(JarFileReadExceptionMessage.FILE_HAS_NO_EXTENSION);
-		}
-		String filetype = new StringBuilder(sb.substring(0, i)).reverse().toString();	
-		InputStream in = clazz.getResourceAsStream(path);
+	public static JarSubFile read(InputStream in, String filetype) throws JarFileReadException, IOException {
 		if(in == null) {
 			throw new JarFileReadException(JarFileReadExceptionMessage.FILE_NOT_FOUND);
 		}
@@ -77,6 +71,27 @@ public class JarFileReader {
 		bin.read(bytes);
 		
 		return new JarSubFile(fileTypes.get(filetype),FileExtensions.valueOf(filetype.toUpperCase()), bytes);
+	}
+	
+	public static JarSubFile readRelative(String path, Class clazz) throws IOException, JarFileReadException {
+		StringBuilder sb = new StringBuilder(path).reverse();
+		int i = sb.indexOf(".");
+		if(i == -1) {
+			throw new JarFileReadException(JarFileReadExceptionMessage.FILE_HAS_NO_EXTENSION);
+		}
+		String filetype = new StringBuilder(sb.substring(0, i)).reverse().toString();	
+		InputStream in = clazz.getResourceAsStream(path);
+		return read(in, filetype);
+	}
+	
+	public static JarSubFile read(String path, FileReader fr) throws JarFileReadException, IOException {
+		StringBuilder sb = new StringBuilder(path).reverse();
+		int i = sb.indexOf(".");
+		if(i == -1) {
+			throw new JarFileReadException(JarFileReadExceptionMessage.FILE_HAS_NO_EXTENSION);
+		}
+		String filetype = new StringBuilder(sb.substring(0, i)).reverse().toString();	
+		return read(fr.read(path), filetype);
 	}
 	
 	

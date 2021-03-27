@@ -1,11 +1,12 @@
 package de.jadr;
 
+import java.awt.BorderLayout;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
 import org.json.JSONObject;
 
-import com.codebrig.journey.JourneyBrowserView;
+//import com.codebrig.journey.JourneyBrowserView;
 import com.sun.net.httpserver.HttpExchange;
 
 import de.jadr.local.JarFileReader;
@@ -13,6 +14,11 @@ import de.jadr.local.JarFileReader.JarSubFile;
 import de.jadr.net.JadrHTTPServer;
 import de.jadr.net.JadrHTTPServer.HTTPHandler;
 import de.jadr.ui.JadrFrame;
+import de.jadr.ui.SwingFXWebView;
+import javafx.application.Platform;
+import javafx.scene.Scene;
+import javafx.scene.web.WebEngine;
+import javafx.scene.web.WebView;
 import javafx.util.Pair;
 
 
@@ -20,12 +26,12 @@ public class Proton {
 
 	private JadrHTTPServer server;
 	private JadrFrame jdrFrame;
-	private JourneyBrowserView chromium;
+	private SwingFXWebView browser;
 	
 	@SafeVarargs
 	public Proton(int port, int width, int height, String httpPath, Pair<String, Object>... args) throws IOException {
 		server = new JadrHTTPServer(port).start();
-		server.addDefaultWebServer("de/jadr/test/http", Proton.class);
+		server.addDefaultWebServer(httpPath);
 		
 		jdrFrame = new JadrFrame(width, height, false);
 		String protonlauncherUrl = "http://localhost:" + server.getPort() + "/proton/index.html";
@@ -54,27 +60,23 @@ public class Proton {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		JourneyBrowserView browser = new JourneyBrowserView(protonlauncherUrl);
-		chromium = browser;
+		browser = new SwingFXWebView(protonlauncherUrl, jdrFrame.getContentPane());
+		jdrFrame.getContentPane().add(browser);  
 
 		jdrFrame.getFrameHead().setCloseHandler(() -> {
-			browser.getCefApp().dispose();
 			jdrFrame.getFrame().dispose();
 			System.exit(0);
 		});
 		
-		jdrFrame.getContentPane().add(browser);
 		jdrFrame.getFrame().setVisible(true);
 	}
 	
 	public void shutdownGui() {
-		chromium.getCefApp().dispose();
 		jdrFrame.getFrame().dispose();
 	}
 	
-	public JourneyBrowserView getChromiumInstance() {
-		return chromium;
+	public SwingFXWebView getBrowser() {
+		return browser;
 	}
 	
 	public JadrFrame getWindow() {

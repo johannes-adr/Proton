@@ -35,22 +35,21 @@ public class JadrHTTPServer {
 	/**
 	 * 
 	 * @param javapackage f.e "de/jadr/test/http"
-	 * @param clazz
+	 * @param fr
 	 */
-	public void addDefaultWebServer(String javapackage, Class clazz) {
+	public void addDefaultWebServer(String javapackage) {
 		this.addHandler("/web", new HTTPHandler() {
 			public void handle(HttpExchange e) throws Exception {
-				String reqUrl = javapackage+e.getRequestURI().toString().replaceFirst("web", "");
+				String reqUrl = javapackage+e.getRequestURI().toString().replaceFirst("web/", "");
 				JarSubFile jsf = null;
 				try {
-					jsf = JarFileReader.readRelative("/"+reqUrl, clazz);
+					jsf = JarFileReader.read("/"+reqUrl);
 				}catch(JarFileReadException ex) {
 					
 					String notfound = "404 Not found";
 					if(ex.message == JarFileReadExceptionMessage.FILE_HAS_NO_EXTENSION) {
 						try {
 							String f = "/"+reqUrl+"index.html";
-							System.out.println(f);
 							jsf = JarFileReader.read(f);
 						}catch(JarFileReadException exx) {
 							e.sendResponseHeaders(HttpURLConnection.HTTP_NOT_FOUND, notfound.getBytes().length);
@@ -71,6 +70,10 @@ public class JadrHTTPServer {
 				e.getResponseBody().write(jsf.getBytes());
 			}
 		});
+	}
+	
+	public static interface FileReader {
+		public InputStream read(String url);
 	}
 	/**
 	 * 
