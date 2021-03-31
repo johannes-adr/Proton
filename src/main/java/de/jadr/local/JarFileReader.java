@@ -15,7 +15,7 @@ import de.jadr.local.exceptions.JarFileReadException.JarFileReadExceptionMessage
 import de.jadr.net.JadrHTTPServer.FileReader;
 
 public class JarFileReader {
-	private static final HashMap<String, String> fileTypes;
+	public static final HashMap<String, String> fileTypes;
 
 	
 	public static class JarSubFile{

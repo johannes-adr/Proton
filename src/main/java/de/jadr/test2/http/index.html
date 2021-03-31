@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <script src="Proton.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+</head>
+
+<body>
+    <h1>Worked!</h1>
+    <h2 id="WebServerPort"></h2>
+    <h2 id="WebSocketPort"></h2>
+    <h2 id="Token"></h2>
+    <h3 id="args"></h3>
+    <script>
+        $("#WebServerPort").html("WebServerPort: " + Proton.getPort());
+        $("#WebSocketPort").html("WebSocketPort: " + Proton.getWebSocketPort());
+        $("#Token").html("Token: " + Proton.getToken());
+        $("#args").html("Start arguments: " + Proton.objectToString(Proton.getArgs()));
+
+        Proton.fetch("Default", {
+            "Message": "HI"
+        }, (response) => {
+            console.log(JSON.stringify(response));
+        });
+
+        Proton.registerEvent("Ready", (ret) => {
+            console.log("Readyevent fired" + JSON.stringify(ret));
+        });
+    </script>
+
+</body>
+
+
+</html>

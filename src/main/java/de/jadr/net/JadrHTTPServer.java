@@ -115,7 +115,6 @@ public class JadrHTTPServer {
 		}else {
 			server = HttpServer.create(new InetSocketAddress(port), 0);
 		}
-		System.out.println("Server started at port " + port);
 		server.start();
 		return this;
 	}

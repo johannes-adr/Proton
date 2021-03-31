@@ -6,7 +6,6 @@ import java.awt.AlphaComposite;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.RenderingHints;
 import java.awt.geom.RoundRectangle2D;
 import java.awt.image.BufferedImage;
@@ -17,6 +16,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.net.InetSocketAddress;
+import java.net.Socket;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
@@ -24,7 +25,7 @@ import java.net.URLConnection;
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.StandardCopyOption;
-import java.util.List;
+import java.security.SecureRandom;
 import java.util.Scanner;
 
 public class JUtils {
@@ -156,6 +157,18 @@ public class JUtils {
 		} else {
 			folder.delete();
 		}
+	}
+	
+	public static final String CHARACTERS = "1234567890!qwertzuiopasdfghjklyxcvbnmQWERTZUIOPASDFGHJKLYXCVBNM.,;:-_#+*~=";
+	public static String getRandomString(int lenght, String in) {
+		char[] c = in.toCharArray();
+		int s = c.length;
+		StringBuilder sb = new StringBuilder(s);
+		SecureRandom r = new SecureRandom();
+		for(int i = 0;i < lenght;i++) {
+			sb.append(c[r.nextInt(s)]);
+		}
+		return sb.toString();
 	}
 
 }

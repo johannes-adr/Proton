@@ -10,12 +10,14 @@ import javafx.scene.Scene;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
   
-public class SwingFXWebView extends JFXPanel {
+public class SwingFXWebView {
  
+	private JFXPanel panel;
 	private WebView browser;
     private WebEngine webEngine;
 	
 	public SwingFXWebView(String url, JPanel parent, Runnable onLoaded) {
+		panel = new JFXPanel();
 		Platform.runLater(()->{
 			browser = new WebView();
 			browser.setPrefWidth(parent.getWidth());
@@ -27,9 +29,13 @@ public class SwingFXWebView extends JFXPanel {
 			Group root = new Group();
 			Scene scene = new Scene(root);
 			root.getChildren().add(browser);
-			this.setScene(scene);
+			panel.setScene(scene);
 			if(onLoaded != null)onLoaded.run();
 		});
+	}
+	
+	public JFXPanel getPanel() {
+		return panel;
 	}
 	
 	public SwingFXWebView(String url, JPanel parent) {
